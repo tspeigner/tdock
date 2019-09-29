@@ -1,3 +1,16 @@
+# About
+This repo is my work for a technical task posed in an interview process.
+
+# Requirements
+- _Note:_ This has been tested on MacOS, Linux
+- [Docker](https://docs.docker.com/v17.12/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- Ability to resolve example.test
+  - With your favorite file editor, edit localhost file 0.0.0.0  example.test www.example.test
+- Ports used: 80,443,8443
+
+# Code comments
+
 events {
   worker_connections  4096;
 }
