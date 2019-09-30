@@ -7,7 +7,9 @@ This repo is my work for a technical task posed in an interview process.
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - Ability to resolve example.test
   - With your favorite file editor, edit localhost file 0.0.0.0  example.test www.example.test
-- Ports used: 80,443,8443
+- Ports used: 
+  - proxy => 80,443
+  - web => 8443
 - clone this repo to your machine `git clone https://github.com/tspeigner/tdock.git`
 - Perform [Tests](#tests)
 
@@ -15,6 +17,7 @@ This repo is my work for a technical task posed in an interview process.
 - Dockerfiles are pretty basic, but point at the public nginx:alpine image.
 - docker-compose files ties the two containers together, mounts a number of files and folders
 - Was not sure if the URL needed to be a randomly generated token or the static uj47G, but I believe with a bit of logic in the conf file there is a way to create a randomly generated token for the path.
+- 
 
 # Tech Task Requirements
 - Deliverables
