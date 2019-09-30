@@ -1,5 +1,5 @@
 # About
-This repo is my work for a technical task posed in an interview process.
+This repo is my work for a technical task posed to me.
 
 # Getting Started
 - _Note:_ This has been tested on MacOS, Linux
