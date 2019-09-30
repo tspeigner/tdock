@@ -1,88 +1,33 @@
 # About
 This repo is my work for a technical task posed in an interview process.
 
-# Requirements
+# Getting Started
 - _Note:_ This has been tested on MacOS, Linux
 - [Docker](https://docs.docker.com/v17.12/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - Ability to resolve example.test
   - With your favorite file editor, edit localhost file 0.0.0.0  example.test www.example.test
 - Ports used: 80,443,8443
+- clone this repo to your machine `git clone https://github.com/tspeigner/tdock.git`
+- Perform [Tests](#tests)
 
 # Code comments
+- Dockerfiles are pretty basic, but point at the public nginx:alpine image.
+- docker-compose files ties the two containers together, mounts a number of files and folders
+- Was not sure if the URL needed to be a randomly generated token or the static uj47G, but I believe with a bit of logic in the conf file there is a way to create a randomly generated token for the path.
 
-events {
-  worker_connections  4096;
-}
+# Tech Task Requirements
+- Deliverables
+  - [Dockerfile for proxy](./proxy/Dockerfile)
+  - [Dockerfile for web](./web/Dockerfile)
+  - [docker-compose file](./docker-compose.yaml)
+  - This document
 
-http {
-  server {
-    ## Listen on port 443, using HTTP2
-    listen                  443 ssl http2;
-    ## For testing purposes, change your /etc/hosts file to include
-    ## 0.0.0.0 example.test www.example.test
-    server_name             example.test;
-    root                    /usr/share/nginx/html;
-    ## SSL Certificates for HTTPS traffic to web server
-    ssl_certificate         /etc/nginx/example.test.crt;
-    ssl_certificate_key     /etc/nginx/example.test.key;
-    ## Store and catch most index files
-    index                   index.php index.html index.htm;
-    access_log              /var/log/nginx/access.log;
-    error_log               /var/log/nginx/error.log crit;
+# Tests
+- docker build proxy 
+- docker build web
+- docker-compose up -d
 
-    ## Redirect any request to /{root} to /uj47G directory
-    location / {
-      return 301 $scheme://$server_name/uj47G;
-    }
-    ## Basic Authentication Protection for secure area
-    location /uj47G {
-      auth_basic           "Secret area";
-      auth_basic_user_file /etc/nginx/.htpasswd; 
-    }
-  }
-}
-
-
-docker-compose.yaml
-version: '3'
-services:
-  # Define proxy server, uses ./proxy/Dockerfile
-  proxy:
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    # Mount/Attach local files to contianer files/locations
-    volumes:
-      - ./proxy/proxy-nginx.conf:/etc/nginx/nginx.conf
-      - ./data/example.test.crt:/etc/nginx/example.test.crt
-      - ./data/example.test.key:/etc/nginx/example.test.key
-      - ./data/logs/access.log:/var/log/nginx/example.test/example_test_access_log
-      - ./data/logs/error.log:/var/log/nginx/example.test/example.test_error_log error;
-      - ./web/.htpasswd:/etc/nginx/.htpasswd
-    ports:
-      # Handle both HTTP/HTTPS requests
-      # http://example.test => https://example.test
-      # https://example.test => https://web
-      - "443:443"
-      - "80:80"
-  # Define web server, uses ./web/Dockerfile
-  web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    # Mount/Attach local files to contianer files/locations
-    volumes:
-      - ./web/web-nginx.conf:/etc/nginx/nginx.conf
-      - ./site:/usr/share/nginx/html
-      - ./data/example.test.crt:/etc/nginx/example.test.crt
-      - ./data/example.test.key:/etc/nginx/example.test.key
-      - ./web/.htpasswd:/etc/nginx/.htpasswd
-      - ./data/logs/access.log:/var/log/nginx/example.test/example_test_access_log
-      - ./data/logs/error.log:/var/log/nginx/example.test/example.test_error_log error;
-    ports:
-    ## HTTPS for Web Server, using 8443, since 443 is being used by proxy server
-      - "8443:443"
-    # Flow: (=> == redirect, in these notes)
-    ## http://example.test => https://example.test => https://web => https://web/uj47G
-    ## resulting in response to browser https://example.test/uj47G or https://example.test/uj47G/index.html
+# Flow: 
+ - Request to http://example.test => https://example.test => https://web => https://web/uj47G
+ - Resulting in response to browser https://example.test/uj47G or https://example.test/uj47G/index.html
