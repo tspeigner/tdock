@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   proxy:
     build:
@@ -6,8 +6,10 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./proxy/proxy-nginx.conf:/etc/nginx/nginx.conf
-      - ./data/example.test.crt:/etc/nginx/example.test.crt
-      - ./data/example.test.key:/etc/nginx/example.test.key
+      # - ./data/example.test.crt:/etc/nginx/example.test.crt
+      # - ./data/example.test.key:/etc/nginx/example.test.key
+      - ./data/example.test.crt:/etc/nginx/localhost.crt
+      - ./data/example.test.key:/etc/nginx/localhost.key
       - ./data/logs/access.log:/var/log/nginx/access.log
       - ./data/logs/error.log:/var/log/nginx/access.log;
     ports:
@@ -20,10 +22,12 @@ services:
     volumes:
       - ./web/web-nginx.conf:/etc/nginx/nginx.conf
       - ./site:/usr/share/nginx/html
-      - ./data/example.test.crt:/etc/nginx/example.test.crt
-      - ./data/example.test.key:/etc/nginx/example.test.key
+      # - ./data/example.test.crt:/etc/nginx/example.test.crt
+      # - ./data/example.test.key:/etc/nginx/example.test.key
+      - ./data/example.test.crt:/etc/nginx/localhost.crt
+      - ./data/example.test.key:/etc/nginx/localhost.key
       - ./web/.htpasswd:/etc/nginx/.htpasswd
       - ./data/logs/access.log:/var/log/nginx/access.log
       - ./data/logs/error.log:/var/log/nginx/error.log
-    ports: 
+    ports:
       - "8443:443"

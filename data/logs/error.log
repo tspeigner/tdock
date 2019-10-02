@@ -1,0 +1,1 @@
+2019/10/02 03:43:21 [emerg] 1#1: cannot load certificate "/etc/nginx/localhost.crt": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('/etc/nginx/localhost.crt','r') error:2006D080:BIO routines:BIO_new_file:no such file)
